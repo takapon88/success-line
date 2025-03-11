@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>成功引き寄せカード</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=M+PLUS+Rounded+1c:wght@300;500;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'M PLUS Rounded 1c', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -17,33 +26,174 @@
             margin: 0;
             padding: 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* 背景の星のアニメーション */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            animation-delay: var(--delay);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--opacity); transform: scale(1); }
+        }
+        
+        /* 光の粒子 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,215,0,0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float var(--float-duration) infinite ease-in-out;
+            animation-delay: var(--float-delay);
+        }
+        
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) translateX(var(--translate-x)) scale(0);
+            }
+            50% {
+                opacity: var(--float-opacity);
+                transform: translateY(var(--translate-y)) translateX(calc(var(--translate-x) * 1.5)) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(var(--translate-y) - 200px)) translateX(var(--translate-x)) scale(0.5);
+            }
+        }
+        
         .container {
             max-width: 500px;
             width: 100%;
+            position: relative;
+            z-index: 2;
         }
+        
         h1 {
             color: #ffd700;
             margin-bottom: 30px;
-            font-size: 28px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        .card {
-            background: linear-gradient(145deg, #0d1b2a 0%, #1b263b 100%);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            margin: 20px 0;
+            font-size: 32px;
+            font-family: 'Noto Serif JP', serif;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 215, 0, 0.4);
+            letter-spacing: 2px;
             position: relative;
+            display: inline-block;
+        }
+        
+        h1::before, h1::after {
+            content: '✨';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        h1::before {
+            left: -40px;
+        }
+        
+        h1::after {
+            right: -40px;
+        }
+        
+        .card-container {
+            position: relative;
+            perspective: 1000px;
+            margin: 20px 0;
+            height: 400px;
+        }
+        
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
             overflow: hidden;
-            min-height: 300px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            transform-style: preserve-3d;
-            transition: all 0.5s ease;
+            padding: 30px;
         }
-        .card::before {
+        
+        .card-back {
+            background: linear-gradient(145deg, #1e1a45 0%, #2e277a 100%);
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            position: relative;
+        }
+        
+        .card-back::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50L0 50 M50 50L100 50 M50 50L50 0 M50 50L50 100' stroke='rgba(255,215,0,0.2)' stroke-width='1'/%3E%3Cpath d='M50 25L75 50L50 75L25 50z' stroke='rgba(255,215,0,0.3)' fill='none' stroke-width='1'/%3E%3Ccircle cx='50' cy='50' r='30' stroke='rgba(255,215,0,0.2)' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 20px 20px;
+            opacity: 0.2;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+        }
+        
+        .card-back i {
+            font-size: 48px;
+            color: #ffd700;
+            opacity: 0.7;
+            transform: rotate(-10deg);
+        }
+        
+        .card-front {
+            background: linear-gradient(145deg, #0d1b2a 0%, #1b263b 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-front::after {
             content: '';
             position: absolute;
             top: -50%;
@@ -53,85 +203,281 @@
             background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
             z-index: 0;
         }
+        
         .card-content {
             position: relative;
             z-index: 1;
         }
+        
         .card-title {
             color: #ffd700;
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 28px;
+            margin-bottom: 25px;
             font-weight: 700;
+            font-family: 'Noto Serif JP', serif;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition-delay: 0.2s;
         }
+        
         .card-message {
             font-size: 22px;
             line-height: 1.6;
             margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition-delay: 0.4s;
         }
-        .is-golden {
-            background: linear-gradient(145deg, #4a3f35 0%, #4a3f35 100%);
+        
+        .card.is-flipped .card-title,
+        .card.is-flipped .card-message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .is-golden .card-front {
+            background: linear-gradient(145deg, #28231c 0%, #3a2e1c 100%);
             border: 2px solid #ffd700;
         }
+        
         .is-golden .card-title {
             color: #ffd700;
         }
-        .is-golden::after {
-            content: '★ 黄金カード ★';
+        
+        .golden-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ffd700;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(45deg, #ffd700, #f8b500);
             color: #1a1a2e;
-            padding: 5px 10px;
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition-delay: 0.6s;
         }
+        
+        .golden-badge i {
+            color: #1a1a2e;
+            font-size: 14px;
+        }
+        
+        .is-golden.is-flipped .golden-badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         button {
             background: linear-gradient(45deg, #ffd700, #f8b500);
             border: none;
             border-radius: 30px;
             color: #1a1a2e;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
-            padding: 15px 30px;
-            margin-top: 20px;
+            padding: 16px 35px;
+            margin-top: 30px;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #f8b500, #ffd700);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
         }
+        
+        button:hover::before {
+            opacity: 1;
+        }
+        
+        button:active {
+            transform: translateY(-2px);
+        }
+        
+        button i {
+            font-size: 20px;
+        }
+        
         .instructions {
             margin-top: 30px;
             opacity: 0.8;
+            font-size: 16px;
+            max-width: 90%;
+            line-height: 1.5;
+            font-weight: 300;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 3px solid rgba(255, 215, 0, 0.5);
+        }
+        
+        .card-counter {
+            margin-top: 15px;
             font-size: 14px;
-            max-width: 80%;
+            opacity: 0.7;
+        }
+        
+        /* レスポンシブデザイン */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 26px;
+            }
+            
+            h1::before, h1::after {
+                display: none;
+            }
+            
+            .card-container {
+                height: 350px;
+            }
+            
+            .card-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .card-message {
+                font-size: 18px;
+            }
+            
+            button {
+                padding: 14px 30px;
+                font-size: 18px;
+            }
+            
+            .instructions {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 背景の星 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 背景の光の粒子 -->
+    <div class="particles" id="particles"></div>
+    
     <div class="container">
         <h1>✨ 成功引き寄せカード ✨</h1>
         
-        <div id="card" class="card">
-            <div class="card-content">
-                <div class="card-title">今日のカードを引く</div>
-                <div class="card-message">下のボタンをクリックして、今日のあなたに必要なメッセージを受け取りましょう。</div>
+        <div class="card-container">
+            <div id="card" class="card">
+                <div class="card-face card-front">
+                    <div class="card-content">
+                        <div class="card-title">今日のカードを引く</div>
+                        <div class="card-message">下のボタンをクリックして、今日のあなたに必要なメッセージを受け取りましょう。</div>
+                    </div>
+                    <div class="golden-badge"><i class="fas fa-star"></i> 黄金カード</div>
+                </div>
+                <div class="card-face card-back">
+                    <i class="fas fa-magic"></i>
+                </div>
             </div>
         </div>
         
-        <button id="drawButton">カードを引く</button>
+        <button id="drawButton"><i class="fas fa-spa"></i> カードを引く</button>
         
         <p class="instructions">
             毎朝1枚のカードを引いて、そのメッセージを意識しながら一日を過ごすことで、
             成功へのエネルギーを引き寄せることができます。
         </p>
+        
+        <div class="card-counter">
+            全52種類（特別な黄金カード7種類を含む）
+        </div>
     </div>
 
     <script>
+        // 背景の星を生成
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const count = window.innerWidth < 600 ? 50 : 100;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // ランダムな位置とサイズ
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                
+                // ランダムなアニメーション
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+                star.style.setProperty('--opacity', `${Math.random() * 0.7 + 0.3}`);
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // 光の粒子を生成
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const count = window.innerWidth < 600 ? 15 : 25;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // ランダムな位置とサイズ
+                const size = Math.random() * 60 + 20;
+                const posX = Math.random() * 100;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                // ランダムなアニメーション
+                particle.style.setProperty('--float-duration', `${Math.random() * 10 + 10}s`);
+                particle.style.setProperty('--float-delay', `${Math.random() * 10}s`);
+                particle.style.setProperty('--float-opacity', `${Math.random() * 0.15 + 0.05}`);
+                particle.style.setProperty('--translate-y', `${-Math.random() * 300 - 100}px`);
+                particle.style.setProperty('--translate-x', `${(Math.random() - 0.5) * 200}px`);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
         // カードデータ
         const cards = [
             // 通常カード (45枚)
@@ -190,34 +536,55 @@
             { title: "使命の目覚め", message: "私の魂の最深部に眠る使命が目覚めます。今日から、真の目的に向かって歩み始めます。", isGolden: true }
         ];
 
-        const cardElement = document.getElementById('card');
-        const cardContentElement = cardElement.querySelector('.card-content');
-        const drawButton = document.getElementById('drawButton');
-
-        // カードを引く機能
-        drawButton.addEventListener('click', () => {
-            // ランダムにカードを選択
-            const randomIndex = Math.floor(Math.random() * cards.length);
-            const selectedCard = cards[randomIndex];
+        // ページ読み込み時に実行
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            createParticles();
             
-            // アニメーション効果
-            cardElement.style.transform = 'rotateY(90deg)';
+            const cardElement = document.getElementById('card');
+            const drawButton = document.getElementById('drawButton');
             
-            setTimeout(() => {
-                // カードの内容を更新
-                cardContentElement.querySelector('.card-title').textContent = selectedCard.title;
-                cardContentElement.querySelector('.card-message').textContent = selectedCard.message;
-                
-                // 黄金カードかどうかのクラスを設定
-                if (selectedCard.isGolden) {
-                    cardElement.classList.add('is-golden');
+            // カードを引く機能
+            drawButton.addEventListener('click', () => {
+                // カードが裏を向いている場合は、またはまだ引いていない場合は処理を続行
+                if (!cardElement.classList.contains('is-flipped') || cardElement.style.transform === 'rotateY(180deg)') {
+                    // ランダムにカードを選択
+                    const randomIndex = Math.floor(Math.random() * cards.length);
+                    const selectedCard = cards[randomIndex];
+                    
+                    // 最初にカードを裏向きに回転
+                    cardElement.style.transform = 'rotateY(180deg)';
+                    
+                    // 内容を更新するためのタイムアウト
+                    setTimeout(() => {
+                        const cardFront = cardElement.querySelector('.card-front');
+                        const cardTitle = cardFront.querySelector('.card-title');
+                        const cardMessage = cardFront.querySelector('.card-message');
+                        
+                        // カードの内容を更新
+                        cardTitle.textContent = selectedCard.title;
+                        cardMessage.textContent = selectedCard.message;
+                        
+                        // 黄金カードかどうかのクラスを設定
+                        if (selectedCard.isGolden) {
+                            cardElement.classList.add('is-golden');
+                        } else {
+                            cardElement.classList.remove('is-golden');
+                        }
+                        
+                        // カードを表向きに回転
+                        cardElement.style.transform = 'rotateY(0deg)';
+                        cardElement.classList.add('is-flipped');
+                    }, 500); // カードが完全に裏向きになった後に実行
                 } else {
-                    cardElement.classList.remove('is-golden');
+                    // カードが表を向いている場合は、裏返す
+                    cardElement.style.transform = 'rotateY(180deg)';
+                    cardElement.classList.remove('is-flipped');
+                    
+                    // クリック時のボタンテキスト変更
+                    drawButton.innerHTML = '<i class="fas fa-spa"></i> 新しいカードを引く';
                 }
-                
-                // カードを元に戻す
-                cardElement.style.transform = 'rotateY(0deg)';
-            }, 250);
+            });
         });
     </script>
 </body>
