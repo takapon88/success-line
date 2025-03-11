@@ -6,7 +6,7 @@
     <title>成功引き寄せカード</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=M+PLUS+Rounded+1c:wght@300;500;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=M+PLUS+Rounded+1c:wght@300;500;700;800&family=Yumincho&display=swap');
         
         * {
             box-sizing: border-box;
@@ -107,6 +107,55 @@
             50% { opacity: var(--opacity); transform: scale(1); }
         }
         
+        /* 新しい流れ星エフェクト */
+        .shooting-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,1) 50%, rgba(255,215,0,1));
+            opacity: 0;
+            transform-origin: left;
+            animation: shoot var(--shoot-duration) ease-out;
+            animation-delay: var(--shoot-delay);
+        }
+        
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            right: 0;
+            top: -2px;
+            box-shadow: 0 0 10px 2px gold;
+        }
+        
+        @keyframes shoot {
+            0% {
+                opacity: 0;
+                transform: translateX(0) translateY(0) rotate(var(--angle));
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(var(--travel-x)) translateY(var(--travel-y)) rotate(var(--angle));
+            }
+        }
+        
         /* 光の粒子と波効果 */
         .particles {
             position: fixed;
@@ -185,6 +234,47 @@
             justify-content: center;
         }
         
+        /* 豪華なタイトル枠 */
+        .title-container {
+            position: relative;
+            margin-bottom: 40px;
+            padding: 10px 30px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ffd700, #ffec8b, #ffd700, #fafad2, #ffd700, #ffec8b);
+            border-image-slice: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.4),
+                0 0 40px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+            transform: perspective(500px) rotateX(5deg);
+            animation: title-pulse 3s infinite alternate;
+        }
+
+        .title-container::before, .title-container::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            font-size: 24px;
+            color: gold;
+            transform: translateY(-50%);
+            text-shadow: 0 0 10px gold;
+        }
+
+        .title-container::before {
+            left: -15px;
+        }
+
+        .title-container::after {
+            right: -15px;
+        }
+
+        @keyframes title-pulse {
+            0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 0 50px rgba(0, 0, 0, 0.5); }
+        }
+        
         /* 豪華なタイトル */
         h1 {
             color: transparent;
@@ -193,16 +283,15 @@
             background-clip: text;
             -webkit-background-clip: text;
             animation: shine 5s linear infinite;
-            margin-bottom: 30px;
-            font-size: 36px;
-            font-family: 'Noto Serif JP', serif;
+            margin: 0;
+            padding: 10px 0;
+            font-size: 34px;
+            font-family: 'Yumincho', 'Noto Serif JP', serif;
             font-weight: 900;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 215, 0, 0.4);
             letter-spacing: 2px;
             position: relative;
             display: inline-block;
             filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.5));
-            transform: perspective(500px) rotateX(10deg);
             text-transform: uppercase;
         }
         
@@ -210,37 +299,14 @@
             to { background-position: 200% center; }
         }
         
-        h1::before, h1::after {
-            content: '✨';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            filter: drop-shadow(0 0 10px gold);
-            animation: sparkle 2s infinite alternate;
-        }
-        
-        h1::before {
-            left: -40px;
-            animation-delay: 0s;
-        }
-        
-        h1::after {
-            right: -40px;
-            animation-delay: 0.5s;
-        }
-        
-        @keyframes sparkle {
-            0% { opacity: 0.7; transform: translateY(-50%) scale(0.8); }
-            100% { opacity: 1; transform: translateY(-50%) scale(1.2); }
-        }
-        
-        /* カードコンテナ */
+        /* カードコンテナ - 縦長に */
         .card-container {
             position: relative;
             perspective: 1000px;
             margin: 20px 0;
-            height: 400px;
-            width: 100%;
+            height: 480px; /* 縦長に変更 */
+            width: 80%; /* 幅を調整 */
+            max-width: 320px; /* 最大幅を設定 */
         }
         
         .card {
@@ -333,6 +399,45 @@
             position: relative;
             overflow: hidden;
         }
+
+        /* 動く模様のパターン */
+        .card-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            z-index: 1;
+            background-size: 200px 200px;
+            animation: pattern-move 20s linear infinite;
+        }
+
+        @keyframes pattern-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 200px; }
+        }
+
+        .pattern-geometric {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='1'%3E%3Cpath d='M25,25 L75,75 M25,75 L75,25'/%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .pattern-cosmos {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='rgba(255,255,255,0.8)'%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='30' cy='40' r='0.5'/%3E%3Ccircle cx='50' cy='70' r='1'/%3E%3Ccircle cx='70' cy='30' r='0.8'/%3E%3Ccircle cx='90' cy='60' r='0.6'/%3E%3Ccircle cx='20' cy='80' r='1.2'/%3E%3Ccircle cx='60' cy='10' r='0.7'/%3E%3Ccircle cx='80' cy='90' r='1'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .pattern-sacred {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,215,0,0.8)' stroke-width='1'%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Cpath d='M50 10L50 90M10 50L90 50M22 22L78 78M22 78L78 22'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .pattern-energy {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='1'%3E%3Cpath d='M0,50 Q25,0 50,50 Q75,100 100,50'/%3E%3Cpath d='M0,30 Q25,80 50,30 Q75,-20 100,30'/%3E%3Cpath d='M0,70 Q25,20 50,70 Q75,120 100,70'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .pattern-alchemy {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,215,0,0.6)' stroke-width='1'%3E%3Cpath d='M50 10L90 50L50 90L10 50z'/%3E%3Ccircle cx='50' cy='50' r='30'/%3E%3C/g%3E%3C/svg%3E");
+        }
         
         /* カード背景のバリエーション */
         .card-bg-default {
@@ -411,7 +516,11 @@
         
         .card-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
         }
         
         .card-title {
@@ -511,6 +620,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            margin-top: 20px;
         }
         
         /* 豪華なボタン */
@@ -523,7 +633,7 @@
             font-size: 20px;
             font-weight: bold;
             padding: 16px 35px;
-            margin-top: 30px;
+            margin: 20px 0;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
             position: relative;
@@ -567,11 +677,11 @@
         
         /* 中央揃えの説明文 */
         .instructions {
-            margin-top: 30px;
+            margin: 15px auto;
             opacity: 0.8;
             font-size: 16px;
             max-width: 90%;
-            line-height: 1.5;
+            line-height: 1.6;
             font-weight: 300;
             background: rgba(0, 0, 0, 0.2);
             padding: 15px 20px;
@@ -582,22 +692,24 @@
         
         .card-counter {
             margin-top: 15px;
+            margin-bottom: 20px;
             font-size: 14px;
             opacity: 0.7;
         }
         
         /* レスポンシブデザイン */
         @media (max-width: 600px) {
+            .title-container {
+                padding: 5px 20px;
+            }
+            
             h1 {
                 font-size: 28px;
             }
             
-            h1::before, h1::after {
-                display: none;
-            }
-            
             .card-container {
-                height: 350px;
+                height: 450px;
+                width: 85%;
             }
             
             .card-title {
@@ -616,6 +728,7 @@
             
             .instructions {
                 font-size: 14px;
+                padding: 12px 15px;
             }
         }
     </style>
@@ -633,6 +746,9 @@
     <!-- 背景の星 -->
     <div class="stars" id="stars"></div>
     
+    <!-- 新しい流れ星 -->
+    <div class="shooting-stars" id="shooting-stars"></div>
+    
     <!-- 背景の光の粒子 -->
     <div class="particles" id="particles"></div>
     
@@ -644,11 +760,15 @@
     </div>
     
     <div class="container">
-        <h1>成功引き寄せカード</h1>
+        <!-- タイトルを枠で囲む -->
+        <div class="title-container">
+            <h1>成功引き寄せカード</h1>
+        </div>
         
         <div class="card-container">
             <div id="card" class="card">
                 <div class="card-face card-front card-bg-default">
+                    <div class="card-pattern pattern-geometric"></div>
                     <div class="ripple" id="ripples"></div>
                     <div class="card-content">
                         <div class="card-title">今日のカードを引く</div>
@@ -680,7 +800,7 @@
         // 背景の星を生成
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            const count = window.innerWidth < 600 ? 50 : 100;
+            const count = window.innerWidth < 600 ? 80 : 150; // 星の数を増やした
             
             for (let i = 0; i < count; i++) {
                 const star = document.createElement('div');
@@ -702,6 +822,60 @@
                 star.style.setProperty('--opacity', `${Math.random() * 0.7 + 0.3}`);
                 
                 starsContainer.appendChild(star);
+            }
+        }
+
+        // 流れ星を生成
+        function createShootingStars() {
+            const container = document.getElementById('shooting-stars');
+            const count = 10; // 生成する流れ星の数
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('shooting-star');
+                
+                // ランダムな位置と角度
+                const startPosX = Math.random() * 100;
+                const startPosY = Math.random() * 30; // 上部から始まるように
+                const angle = Math.random() * 30 - 15; // -15度から15度
+                
+                // 移動距離を設定
+                const travelX = Math.random() * 400 + 200;
+                const travelY = Math.random() * 400 + 200;
+                
+                star.style.left = `${startPosX}%`;
+                star.style.top = `${startPosY}%`;
+                star.style.setProperty('--angle', `${angle}deg`);
+                star.style.setProperty('--travel-x', `${travelX}px`);
+                star.style.setProperty('--travel-y', `${travelY}px`);
+                
+                // アニメーションのタイミング
+                star.style.setProperty('--shoot-duration', `${Math.random() * 2 + 1}s`);
+                star.style.setProperty('--shoot-delay', `${Math.random() * 20 + 5}s`);
+                
+                // 繰り返しアニメーション
+                star.addEventListener('animationend', () => {
+                    // 新しい位置と角度を設定
+                    const newPosX = Math.random() * 100;
+                    const newPosY = Math.random() * 30;
+                    const newAngle = Math.random() * 30 - 15;
+                    const newTravelX = Math.random() * 400 + 200;
+                    const newTravelY = Math.random() * 400 + 200;
+                    
+                    star.style.left = `${newPosX}%`;
+                    star.style.top = `${newPosY}%`;
+                    star.style.setProperty('--angle', `${newAngle}deg`);
+                    star.style.setProperty('--travel-x', `${newTravelX}px`);
+                    star.style.setProperty('--travel-y', `${newTravelY}px`);
+                    star.style.setProperty('--shoot-delay', '0s');
+                    
+                    // アニメーションをリセット
+                    star.style.animation = 'none';
+                    void star.offsetWidth; // リフロー
+                    star.style.animation = `shoot ${Math.random() * 2 + 1}s ease-out ${Math.random() * 5}s`;
+                });
+                
+                container.appendChild(star);
             }
         }
         
@@ -788,68 +962,86 @@
             currentIndex = (currentIndex + 1) % backgrounds.length;
             backgrounds[currentIndex].classList.add('active');
         }
+
+        // カードの背景パターンを取得
+        function getCardPattern(type) {
+            const patterns = [
+                'pattern-geometric',
+                'pattern-cosmos',
+                'pattern-sacred',
+                'pattern-energy',
+                'pattern-alchemy'
+            ];
+            
+            if (type === 'random') {
+                return patterns[Math.floor(Math.random() * patterns.length)];
+            }
+            
+            return type;
+        }
         
         // カードデータ
         const cards = [
             // 通常カード (45枚)
-            { title: "富の循環", message: "今日、私は豊かさを与え、豊かさを受け取ります。循環するエネルギーが私に富をもたらします。", isGolden: false, background: "card-bg-default" },
-            { title: "潜在意識の目覚め", message: "私の潜在意識は無限の可能性に満ちています。今日、その力が最大限に発揮されます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "感謝の力", message: "感謝の気持ちが、さらなる豊かさを引き寄せます。今日一日、すべてに感謝して過ごします。", isGolden: false, background: "card-bg-dream" },
-            { title: "自己価値の認識", message: "私は無限の価値を持っています。私の存在そのものが、この世界への贈り物です。", isGolden: false, background: "card-bg-magic" },
-            { title: "決断の瞬間", message: "今日、正しい決断を下す直感が冴えわたります。迷いなく最善の選択ができます。", isGolden: false, background: "card-bg-light" },
-            { title: "創造性の開花", message: "私の中に眠る創造力が今日、目覚めます。新しいアイデアが次々と湧き上がってきます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "エネルギーの保護", message: "私のエネルギーは神聖で、守られています。ネガティブな影響を受けることなく、純粋な状態を保ちます。", isGolden: false, background: "card-bg-default" },
-            { title: "自己信頼", message: "私は自分の能力を完全に信頼します。私の内なる知恵が、すべての課題を解決へと導きます。", isGolden: false, background: "card-bg-dream" },
-            { title: "引き寄せの法則", message: "私の思考が現実を創り出します。今日、ポジティブなエネルギーだけを意識的に引き寄せます。", isGolden: false, background: "card-bg-magic" },
-            { title: "未来の種まき", message: "今日の行動は、未来の豊かな実りのための種まきです。確信を持って前進します。", isGolden: false, background: "card-bg-light" },
-            { title: "成功の土台", message: "私の日々の小さな成功の積み重ねが、大きな成功の土台となります。今日も一歩前進します。", isGolden: false, background: "card-bg-default" },
-            { title: "バランスの調和", message: "私の人生のすべての要素が完璧なバランスで調和しています。流れに身を任せます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "無限の機会", message: "今日、無限の機会が私の前に広がっています。最高の可能性を選び取ります。", isGolden: false, background: "card-bg-dream" },
-            { title: "内なる声", message: "私の内なる声は、最も賢明なガイドです。今日はその導きに従って行動します。", isGolden: false, background: "card-bg-magic" },
-            { title: "エネルギーの循環", message: "私は宇宙のエネルギーと一体になり、その循環の中で最高の自分を表現します。", isGolden: false, background: "card-bg-light" },
-            { title: "豊かさの受容", message: "私は豊かさを受け取るに値する存在です。抵抗なく、自然に富を受け入れます。", isGolden: false, background: "card-bg-default" },
-            { title: "波動の上昇", message: "今日、私の波動は最高の状態に上昇します。高い周波数で人生を引き寄せます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "無条件の愛", message: "私は自分自身と他者に無条件の愛を送ります。愛のエネルギーが私の人生を豊かにします。", isGolden: false, background: "card-bg-dream" },
-            { title: "意図の力", message: "明確な意図を持って行動することで、望む結果を引き寄せます。今日の私の意図は明確です。", isGolden: false, background: "card-bg-magic" },
-            { title: "直感の鋭さ", message: "私の直感は常に正確です。その微かな声に耳を傾け、導かれるままに行動します。", isGolden: false, background: "card-bg-light" },
-            { title: "エネルギーの浄化", message: "私のエネルギーフィールドは清らかで純粋です。不要なものはすべて解放されます。", isGolden: false, background: "card-bg-default" },
-            { title: "自己実現", message: "私は自分の可能性を最大限に実現するために生まれてきました。今日もその道を歩みます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "豊穣の法則", message: "私が蒔いた種は必ず実を結びます。今日も豊かな未来のための種を蒔きます。", isGolden: false, background: "card-bg-dream" },
-            { title: "内なる平和", message: "私の内側には深い平和があります。その静けさの中で、最高の判断ができます。", isGolden: false, background: "card-bg-magic" },
-            { title: "使命の共鳴", message: "私の行動が使命と共鳴するとき、最大の力を発揮します。今日も使命に沿って生きます。", isGolden: false, background: "card-bg-light" },
-            { title: "変化の受容", message: "私は変化を恐れず、むしろ歓迎します。すべての変化は成長のための贈り物です。", isGolden: false, background: "card-bg-default" },
-            { title: "豊かさの思考", message: "私の思考は豊かさに満ちています。欠乏ではなく、常に充足を意識します。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "信頼の力", message: "私は宇宙の完璧な計画を信頼します。すべてが最適なタイミングで起こることを知っています。", isGolden: false, background: "card-bg-dream" },
-            { title: "エネルギーの拡大", message: "私のエネルギーは今日、さらに拡大します。より多くの良きものを引き寄せる力が高まります。", isGolden: false, background: "card-bg-magic" },
-            { title: "調和の創造", message: "私は自分の周りに調和を創り出します。すべての関係性が最高の状態へと整います。", isGolden: false, background: "card-bg-light" },
-            { title: "現実の創造者", message: "私は自分の現実の創造者です。今日、意識的に最高の現実を選択します。", isGolden: false, background: "card-bg-default" },
-            { title: "光の存在", message: "私は光の存在として、周りの環境も明るく照らします。私のエネルギーが世界を変えます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "完璧なタイミング", message: "すべては完璧なタイミングで起こります。急ぐことなく、流れに身を任せます。", isGolden: false, background: "card-bg-dream" },
-            { title: "自己解放", message: "私は過去の制限から自分を解放します。真の自分の可能性を最大限に発揮します。", isGolden: false, background: "card-bg-magic" },
-            { title: "繁栄の意識", message: "私の意識は繁栄で満たされています。豊かさが自然と私のもとに流れ込みます。", isGolden: false, background: "card-bg-light" },
-            { title: "エネルギーの共鳴", message: "私は望む現実のエネルギーと共鳴します。同じ周波数のものを引き寄せます。", isGolden: false, background: "card-bg-default" },
-            { title: "内なる導き", message: "私の内側には完璧な導きがあります。その声に耳を傾け、確信を持って前進します。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "宇宙の支援", message: "宇宙は常に私をサポートしています。必要なものはすべて、必要なときに与えられます。", isGolden: false, background: "card-bg-dream" },
-            { title: "意識の拡大", message: "私の意識は今日、さらに拡大します。より大きな視点で物事を見ることができます。", isGolden: false, background: "card-bg-magic" },
-            { title: "本質への回帰", message: "私は自分の本質に立ち返ります。真の自分を生きることで、最大の力を発揮します。", isGolden: false, background: "card-bg-light" },
-            { title: "奉仕の精神", message: "私は喜びを持って他者に奉仕します。与えることが、さらなる豊かさを引き寄せます。", isGolden: false, background: "card-bg-default" },
-            { title: "エネルギーの同調", message: "私は成功と豊かさのエネルギーに同調します。似たものは似たものを引き寄せます。", isGolden: false, background: "card-bg-cosmos" },
-            { title: "魂の目覚め", message: "私の魂は完全に目覚めています。高次の知恵にアクセスし、導かれるままに行動します。", isGolden: false, background: "card-bg-dream" },
-            { title: "無限の可能性", message: "私の前には無限の可能性が広がっています。制限なく、自由に選択できることを知っています。", isGolden: false, background: "card-bg-magic" },
+            { title: "富の循環", message: "今日、私は豊かさを与え、豊かさを受け取ります。循環するエネルギーが私に富をもたらします。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "潜在意識の目覚め", message: "私の潜在意識は無限の可能性に満ちています。今日、その力が最大限に発揮されます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-cosmos" },
+            { title: "感謝の力", message: "感謝の気持ちが、さらなる豊かさを引き寄せます。今日一日、すべてに感謝して過ごします。", isGolden: false, background: "card-bg-dream", pattern: "pattern-sacred" },
+            { title: "自己価値の認識", message: "私は無限の価値を持っています。私の存在そのものが、この世界への贈り物です。", isGolden: false, background: "card-bg-magic", pattern: "pattern-geometric" },
+            { title: "決断の瞬間", message: "今日、正しい決断を下す直感が冴えわたります。迷いなく最善の選択ができます。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "創造性の開花", message: "私の中に眠る創造力が今日、目覚めます。新しいアイデアが次々と湧き上がってきます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-energy" },
+            { title: "エネルギーの保護", message: "私のエネルギーは神聖で、守られています。ネガティブな影響を受けることなく、純粋な状態を保ちます。", isGolden: false, background: "card-bg-default", pattern: "pattern-sacred" },
+            { title: "自己信頼", message: "私は自分の能力を完全に信頼します。私の内なる知恵が、すべての課題を解決へと導きます。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "引き寄せの法則", message: "私の思考が現実を創り出します。今日、ポジティブなエネルギーだけを意識的に引き寄せます。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "未来の種まき", message: "今日の行動は、未来の豊かな実りのための種まきです。確信を持って前進します。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "成功の土台", message: "私の日々の小さな成功の積み重ねが、大きな成功の土台となります。今日も一歩前進します。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "バランスの調和", message: "私の人生のすべての要素が完璧なバランスで調和しています。流れに身を任せます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "無限の機会", message: "今日、無限の機会が私の前に広がっています。最高の可能性を選び取ります。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "内なる声", message: "私の内なる声は、最も賢明なガイドです。今日はその導きに従って行動します。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "エネルギーの循環", message: "私は宇宙のエネルギーと一体になり、その循環の中で最高の自分を表現します。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "豊かさの受容", message: "私は豊かさを受け取るに値する存在です。抵抗なく、自然に富を受け入れます。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "波動の上昇", message: "今日、私の波動は最高の状態に上昇します。高い周波数で人生を引き寄せます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "無条件の愛", message: "私は自分自身と他者に無条件の愛を送ります。愛のエネルギーが私の人生を豊かにします。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "意図の力", message: "明確な意図を持って行動することで、望む結果を引き寄せます。今日の私の意図は明確です。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "直感の鋭さ", message: "私の直感は常に正確です。その微かな声に耳を傾け、導かれるままに行動します。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "エネルギーの浄化", message: "私のエネルギーフィールドは清らかで純粋です。不要なものはすべて解放されます。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "自己実現", message: "私は自分の可能性を最大限に実現するために生まれてきました。今日もその道を歩みます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "豊穣の法則", message: "私が蒔いた種は必ず実を結びます。今日も豊かな未来のための種を蒔きます。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "内なる平和", message: "私の内側には深い平和があります。その静けさの中で、最高の判断ができます。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "使命の共鳴", message: "私の行動が使命と共鳴するとき、最大の力を発揮します。今日も使命に沿って生きます。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "変化の受容", message: "私は変化を恐れず、むしろ歓迎します。すべての変化は成長のための贈り物です。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "豊かさの思考", message: "私の思考は豊かさに満ちています。欠乏ではなく、常に充足を意識します。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "信頼の力", message: "私は宇宙の完璧な計画を信頼します。すべてが最適なタイミングで起こることを知っています。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "エネルギーの拡大", message: "私のエネルギーは今日、さらに拡大します。より多くの良きものを引き寄せる力が高まります。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "調和の創造", message: "私は自分の周りに調和を創り出します。すべての関係性が最高の状態へと整います。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "現実の創造者", message: "私は自分の現実の創造者です。今日、意識的に最高の現実を選択します。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "光の存在", message: "私は光の存在として、周りの環境も明るく照らします。私のエネルギーが世界を変えます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "完璧なタイミング", message: "すべては完璧なタイミングで起こります。急ぐことなく、流れに身を任せます。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "自己解放", message: "私は過去の制限から自分を解放します。真の自分の可能性を最大限に発揮します。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "繁栄の意識", message: "私の意識は繁栄で満たされています。豊かさが自然と私のもとに流れ込みます。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "エネルギーの共鳴", message: "私は望む現実のエネルギーと共鳴します。同じ周波数のものを引き寄せます。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "内なる導き", message: "私の内側には完璧な導きがあります。その声に耳を傾け、確信を持って前進します。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "宇宙の支援", message: "宇宙は常に私をサポートしています。必要なものはすべて、必要なときに与えられます。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "意識の拡大", message: "私の意識は今日、さらに拡大します。より大きな視点で物事を見ることができます。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
+            { title: "本質への回帰", message: "私は自分の本質に立ち返ります。真の自分を生きることで、最大の力を発揮します。", isGolden: false, background: "card-bg-light", pattern: "pattern-alchemy" },
+            { title: "奉仕の精神", message: "私は喜びを持って他者に奉仕します。与えることが、さらなる豊かさを引き寄せます。", isGolden: false, background: "card-bg-default", pattern: "pattern-energy" },
+            { title: "エネルギーの同調", message: "私は成功と豊かさのエネルギーに同調します。似たものは似たものを引き寄せます。", isGolden: false, background: "card-bg-cosmos", pattern: "pattern-sacred" },
+            { title: "魂の目覚め", message: "私の魂は完全に目覚めています。高次の知恵にアクセスし、導かれるままに行動します。", isGolden: false, background: "card-bg-dream", pattern: "pattern-geometric" },
+            { title: "無限の可能性", message: "私の前には無限の可能性が広がっています。制限なく、自由に選択できることを知っています。", isGolden: false, background: "card-bg-magic", pattern: "pattern-cosmos" },
 
             // 黄金カード (7枚)
-            { title: "天命の実現", message: "私は自分の天命を知り、それに従って行動します。宇宙は私の使命の実現をサポートしています。", isGolden: true, background: "card-bg-default" },
-            { title: "エネルギーの浄化", message: "今日、私のエネルギーフィールドはすべての障害から浄化されます。純粋な引き寄せ力が高まります。", isGolden: true, background: "card-bg-cosmos" },
-            { title: "無限の豊かさ", message: "宇宙の豊かさは無限です。私はその流れに身を委ね、あらゆる形の富を受け取る準備ができています。", isGolden: true, background: "card-bg-dream" },
-            { title: "神聖なる導き", message: "私は神聖なる存在に導かれています。すべての選択と行動が、最高善のために調和しています。", isGolden: true, background: "card-bg-magic" },
-            { title: "奇跡の実現", message: "私は奇跡を起こす力を持っています。不可能と思えることも、信じる心があれば実現します。", isGolden: true, background: "card-bg-light" },
-            { title: "宇宙の法則", message: "私は宇宙の法則と完全に調和しています。自然の流れに逆らわず、最大の成功を収めます。", isGolden: true, background: "card-bg-default" },
-            { title: "使命の目覚め", message: "私の魂の最深部に眠る使命が目覚めます。今日から、真の目的に向かって歩み始めます。", isGolden: true, background: "card-bg-cosmos" }
+            { title: "天命の実現", message: "私は自分の天命を知り、それに従って行動します。宇宙は私の使命の実現をサポートしています。", isGolden: true, background: "card-bg-default", pattern: "pattern-sacred" },
+            { title: "エネルギーの浄化", message: "今日、私のエネルギーフィールドはすべての障害から浄化されます。純粋な引き寄せ力が高まります。", isGolden: true, background: "card-bg-cosmos", pattern: "pattern-alchemy" },
+            { title: "無限の豊かさ", message: "宇宙の豊かさは無限です。私はその流れに身を委ね、あらゆる形の富を受け取る準備ができています。", isGolden: true, background: "card-bg-dream", pattern: "pattern-energy" },
+            { title: "神聖なる導き", message: "私は神聖なる存在に導かれています。すべての選択と行動が、最高善のために調和しています。", isGolden: true, background: "card-bg-magic", pattern: "pattern-geometric" },
+            { title: "奇跡の実現", message: "私は奇跡を起こす力を持っています。不可能と思えることも、信じる心があれば実現します。", isGolden: true, background: "card-bg-light", pattern: "pattern-cosmos" },
+            { title: "宇宙の法則", message: "私は宇宙の法則と完全に調和しています。自然の流れに逆らわず、最大の成功を収めます。", isGolden: true, background: "card-bg-default", pattern: "pattern-sacred" },
+            { title: "使命の目覚め", message: "私の魂の最深部に眠る使命が目覚めます。今日から、真の目的に向かって歩み始めます。", isGolden: true, background: "card-bg-cosmos", pattern: "pattern-alchemy" }
         ];
 
         // ページ読み込み時に実行
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
+            createShootingStars();
             createParticles();
             createLightWaves();
             createRipples();
@@ -874,6 +1066,7 @@
                     // 内容を更新するためのタイムアウト
                     setTimeout(() => {
                         const cardFront = cardElement.querySelector('.card-front');
+                        const cardPattern = cardFront.querySelector('.card-pattern');
                         const cardTitle = cardFront.querySelector('.card-title');
                         const cardMessage = cardFront.querySelector('.card-message');
                         
@@ -881,8 +1074,9 @@
                         cardTitle.textContent = selectedCard.title;
                         cardMessage.textContent = selectedCard.message;
                         
-                        // カードの背景を設定
+                        // カードの背景とパターンを設定
                         cardFront.className = `card-face card-front ${selectedCard.background}`;
+                        cardPattern.className = `card-pattern ${selectedCard.pattern}`;
                         
                         // 黄金カードかどうかのクラスを設定
                         if (selectedCard.isGolden) {
