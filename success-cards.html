@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成功引き寄せカード</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .card {
+            background: linear-gradient(145deg, #0d1b2a 0%, #1b263b 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+        .card-title {
+            color: #ffd700;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .card-message {
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .is-golden {
+            background: linear-gradient(145deg, #4a3f35 0%, #4a3f35 100%);
+            border: 2px solid #ffd700;
+        }
+        .is-golden .card-title {
+            color: #ffd700;
+        }
+        .is-golden::after {
+            content: '★ 黄金カード ★';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        button {
+            background: linear-gradient(45deg, #ffd700, #f8b500);
+            border: none;
+            border-radius: 30px;
+            color: #1a1a2e;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px 30px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+        .instructions {
+            margin-top: 30px;
+            opacity: 0.8;
+            font-size: 14px;
+            max-width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ 成功引き寄せカード ✨</h1>
+        
+        <div id="card" class="card">
+            <div class="card-content">
+                <div class="card-title">今日のカードを引く</div>
+                <div class="card-message">下のボタンをクリックして、今日のあなたに必要なメッセージを受け取りましょう。</div>
+            </div>
+        </div>
+        
+        <button id="drawButton">カードを引く</button>
+        
+        <p class="instructions">
+            毎朝1枚のカードを引いて、そのメッセージを意識しながら一日を過ごすことで、
+            成功へのエネルギーを引き寄せることができます。
+        </p>
+    </div>
+
+    <script>
+        // カードデータ
+        const cards = [
+            // 通常カード (45枚)
+            { title: "富の循環", message: "今日、私は豊かさを与え、豊かさを受け取ります。循環するエネルギーが私に富をもたらします。", isGolden: false },
+            { title: "潜在意識の目覚め", message: "私の潜在意識は無限の可能性に満ちています。今日、その力が最大限に発揮されます。", isGolden: false },
+            { title: "感謝の力", message: "感謝の気持ちが、さらなる豊かさを引き寄せます。今日一日、すべてに感謝して過ごします。", isGolden: false },
+            { title: "自己価値の認識", message: "私は無限の価値を持っています。私の存在そのものが、この世界への贈り物です。", isGolden: false },
+            { title: "決断の瞬間", message: "今日、正しい決断を下す直感が冴えわたります。迷いなく最善の選択ができます。", isGolden: false },
+            { title: "創造性の開花", message: "私の中に眠る創造力が今日、目覚めます。新しいアイデアが次々と湧き上がってきます。", isGolden: false },
+            { title: "エネルギーの保護", message: "私のエネルギーは神聖で、守られています。ネガティブな影響を受けることなく、純粋な状態を保ちます。", isGolden: false },
+            { title: "自己信頼", message: "私は自分の能力を完全に信頼します。私の内なる知恵が、すべての課題を解決へと導きます。", isGolden: false },
+            { title: "引き寄せの法則", message: "私の思考が現実を創り出します。今日、ポジティブなエネルギーだけを意識的に引き寄せます。", isGolden: false },
+            { title: "未来の種まき", message: "今日の行動は、未来の豊かな実りのための種まきです。確信を持って前進します。", isGolden: false },
+            { title: "成功の土台", message: "私の日々の小さな成功の積み重ねが、大きな成功の土台となります。今日も一歩前進します。", isGolden: false },
+            { title: "バランスの調和", message: "私の人生のすべての要素が完璧なバランスで調和しています。流れに身を任せます。", isGolden: false },
+            { title: "無限の機会", message: "今日、無限の機会が私の前に広がっています。最高の可能性を選び取ります。", isGolden: false },
+            { title: "内なる声", message: "私の内なる声は、最も賢明なガイドです。今日はその導きに従って行動します。", isGolden: false },
+            { title: "エネルギーの循環", message: "私は宇宙のエネルギーと一体になり、その循環の中で最高の自分を表現します。", isGolden: false },
+            { title: "豊かさの受容", message: "私は豊かさを受け取るに値する存在です。抵抗なく、自然に富を受け入れます。", isGolden: false },
+            { title: "波動の上昇", message: "今日、私の波動は最高の状態に上昇します。高い周波数で人生を引き寄せます。", isGolden: false },
+            { title: "無条件の愛", message: "私は自分自身と他者に無条件の愛を送ります。愛のエネルギーが私の人生を豊かにします。", isGolden: false },
+            { title: "意図の力", message: "明確な意図を持って行動することで、望む結果を引き寄せます。今日の私の意図は明確です。", isGolden: false },
+            { title: "直感の鋭さ", message: "私の直感は常に正確です。その微かな声に耳を傾け、導かれるままに行動します。", isGolden: false },
+            { title: "エネルギーの浄化", message: "私のエネルギーフィールドは清らかで純粋です。不要なものはすべて解放されます。", isGolden: false },
+            { title: "自己実現", message: "私は自分の可能性を最大限に実現するために生まれてきました。今日もその道を歩みます。", isGolden: false },
+            { title: "豊穣の法則", message: "私が蒔いた種は必ず実を結びます。今日も豊かな未来のための種を蒔きます。", isGolden: false },
+            { title: "内なる平和", message: "私の内側には深い平和があります。その静けさの中で、最高の判断ができます。", isGolden: false },
+            { title: "使命の共鳴", message: "私の行動が使命と共鳴するとき、最大の力を発揮します。今日も使命に沿って生きます。", isGolden: false },
+            { title: "変化の受容", message: "私は変化を恐れず、むしろ歓迎します。すべての変化は成長のための贈り物です。", isGolden: false },
+            { title: "豊かさの思考", message: "私の思考は豊かさに満ちています。欠乏ではなく、常に充足を意識します。", isGolden: false },
+            { title: "信頼の力", message: "私は宇宙の完璧な計画を信頼します。すべてが最適なタイミングで起こることを知っています。", isGolden: false },
+            { title: "エネルギーの拡大", message: "私のエネルギーは今日、さらに拡大します。より多くの良きものを引き寄せる力が高まります。", isGolden: false },
+            { title: "調和の創造", message: "私は自分の周りに調和を創り出します。すべての関係性が最高の状態へと整います。", isGolden: false },
+            { title: "現実の創造者", message: "私は自分の現実の創造者です。今日、意識的に最高の現実を選択します。", isGolden: false },
+            { title: "光の存在", message: "私は光の存在として、周りの環境も明るく照らします。私のエネルギーが世界を変えます。", isGolden: false },
+            { title: "完璧なタイミング", message: "すべては完璧なタイミングで起こります。急ぐことなく、流れに身を任せます。", isGolden: false },
+            { title: "自己解放", message: "私は過去の制限から自分を解放します。真の自分の可能性を最大限に発揮します。", isGolden: false },
+            { title: "繁栄の意識", message: "私の意識は繁栄で満たされています。豊かさが自然と私のもとに流れ込みます。", isGolden: false },
+            { title: "エネルギーの共鳴", message: "私は望む現実のエネルギーと共鳴します。同じ周波数のものを引き寄せます。", isGolden: false },
+            { title: "内なる導き", message: "私の内側には完璧な導きがあります。その声に耳を傾け、確信を持って前進します。", isGolden: false },
+            { title: "宇宙の支援", message: "宇宙は常に私をサポートしています。必要なものはすべて、必要なときに与えられます。", isGolden: false },
+            { title: "意識の拡大", message: "私の意識は今日、さらに拡大します。より大きな視点で物事を見ることができます。", isGolden: false },
+            { title: "本質への回帰", message: "私は自分の本質に立ち返ります。真の自分を生きることで、最大の力を発揮します。", isGolden: false },
+            { title: "奉仕の精神", message: "私は喜びを持って他者に奉仕します。与えることが、さらなる豊かさを引き寄せます。", isGolden: false },
+            { title: "エネルギーの同調", message: "私は成功と豊かさのエネルギーに同調します。似たものは似たものを引き寄せます。", isGolden: false },
+            { title: "魂の目覚め", message: "私の魂は完全に目覚めています。高次の知恵にアクセスし、導かれるままに行動します。", isGolden: false },
+            { title: "無限の可能性", message: "私の前には無限の可能性が広がっています。制限なく、自由に選択できることを知っています。", isGolden: false },
+
+            // 黄金カード (7枚)
+            { title: "天命の実現", message: "私は自分の天命を知り、それに従って行動します。宇宙は私の使命の実現をサポートしています。", isGolden: true },
+            { title: "エネルギーの浄化", message: "今日、私のエネルギーフィールドはすべての障害から浄化されます。純粋な引き寄せ力が高まります。", isGolden: true },
+            { title: "無限の豊かさ", message: "宇宙の豊かさは無限です。私はその流れに身を委ね、あらゆる形の富を受け取る準備ができています。", isGolden: true },
+            { title: "神聖なる導き", message: "私は神聖なる存在に導かれています。すべての選択と行動が、最高善のために調和しています。", isGolden: true },
+            { title: "奇跡の実現", message: "私は奇跡を起こす力を持っています。不可能と思えることも、信じる心があれば実現します。", isGolden: true },
+            { title: "宇宙の法則", message: "私は宇宙の法則と完全に調和しています。自然の流れに逆らわず、最大の成功を収めます。", isGolden: true },
+            { title: "使命の目覚め", message: "私の魂の最深部に眠る使命が目覚めます。今日から、真の目的に向かって歩み始めます。", isGolden: true }
+        ];
+
+        const cardElement = document.getElementById('card');
+        const cardContentElement = cardElement.querySelector('.card-content');
+        const drawButton = document.getElementById('drawButton');
+
+        // カードを引く機能
+        drawButton.addEventListener('click', () => {
+            // ランダムにカードを選択
+            const randomIndex = Math.floor(Math.random() * cards.length);
+            const selectedCard = cards[randomIndex];
+            
+            // アニメーション効果
+            cardElement.style.transform = 'rotateY(90deg)';
+            
+            setTimeout(() => {
+                // カードの内容を更新
+                cardContentElement.querySelector('.card-title').textContent = selectedCard.title;
+                cardContentElement.querySelector('.card-message').textContent = selectedCard.message;
+                
+                // 黄金カードかどうかのクラスを設定
+                if (selectedCard.isGolden) {
+                    cardElement.classList.add('is-golden');
+                } else {
+                    cardElement.classList.remove('is-golden');
+                }
+                
+                // カードを元に戻す
+                cardElement.style.transform = 'rotateY(0deg)';
+            }, 250);
+        });
+    </script>
+</body>
+</html>
